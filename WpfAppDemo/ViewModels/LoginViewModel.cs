@@ -1,17 +1,15 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using WpfAppDemo.Views;
 
 namespace WpfAppDemo.ViewModels;
 
 public class LoginViewModel : Screen
 {
-    private readonly ShellViewModel _shellViewModel;
+    private readonly IEventAggregator _eventAggregator;
 
-    public LoginViewModel(ShellViewModel shellViewModel)
+    public LoginViewModel(IEventAggregator eventAggregator)
     {
-        _shellViewModel = shellViewModel;
+        _eventAggregator = eventAggregator;
     }
 
     private string _username;
@@ -36,12 +34,17 @@ public class LoginViewModel : Screen
         }
     }
 
-    public async Task Login()
+    //public async Task Login(string password)
+    public async Task Login()//string password)
     {
-        // fake login
+        //Investigate PasswordBox in view
+        //var view = (LoginView)this.GetView();
+        //var password = view.GetPassword();
+        //Password = password;
         if (Username == "admin" && Password == "123")
         {
-            await _shellViewModel.ShowMainView();
+            await _eventAggregator.PublishOnUIThreadAsync(
+                new LoginSuccessEvent());
         }
     }
 }

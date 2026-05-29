@@ -22,5 +22,13 @@ namespace WpfAppDemo.Views
         {
             InitializeComponent();
         }
+
+        //PasswordBox.Password --> không bind trực tiếp được
+        //cach khong chuan cho password box
+        public string GetPassword()
+        {
+            return PasswordBox.Password;
+        }
+
     }
 }
