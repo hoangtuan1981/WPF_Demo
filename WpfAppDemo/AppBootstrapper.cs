@@ -1,32 +1,72 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using WpfAppDemo.ViewModels;
 
 namespace WpfAppDemo;
 
+#region "Old code"
+//public class AppBootstrapper : BootstrapperBase
+//{
+//    private readonly SimpleContainer _container = new();
+//    public AppBootstrapper()
+//    {
+//        Initialize();
+//    }
+
+//    protected override async void OnStartup(object sender, StartupEventArgs e)
+//    {
+//        //// Khởi chạy ứng dụng và hiển thị ShellViewModel đầu tiên
+//        await DisplayRootViewForAsync<ShellViewModel>();
+//    }
+
+//    protected override void Configure()
+//    {
+//        _container.Singleton<IWindowManager, WindowManager>();
+//        _container.Singleton<IEventAggregator, EventAggregator>();
+
+//        //_container.PerRequest<LoginViewModel>();
+//        //_container.PerRequest<ShellViewModel>();
+//    }
+//}
+#endregion "Old code"
 public class AppBootstrapper : BootstrapperBase
 {
-    private readonly SimpleContainer _container = new();
+    private SimpleContainer _container;
+
     public AppBootstrapper()
     {
         Initialize();
     }
 
-    protected override async void OnStartup(object sender, StartupEventArgs e)
-    {
-        //// Khởi chạy ứng dụng và hiển thị ShellViewModel đầu tiên
-        await DisplayRootViewForAsync<ShellViewModel>();
-    }
-
     protected override void Configure()
     {
+        _container = new SimpleContainer();
+
         _container.Singleton<IWindowManager, WindowManager>();
         _container.Singleton<IEventAggregator, EventAggregator>();
 
-        //_container.PerRequest<LoginViewModel>();
-        //_container.PerRequest<ShellViewModel>();
+        _container.PerRequest<ShellViewModel>();
+        _container.PerRequest<LoginViewModel>();
+        _container.PerRequest<MainViewModel>();
+    }
+
+    protected override object GetInstance(System.Type service, string key)
+    {
+        return _container.GetInstance(service, key);
+    }
+
+    protected override IEnumerable<object> GetAllInstances(System.Type service)
+    {
+        return _container.GetAllInstances(service);
+    }
+
+    protected override void BuildUp(object instance)
+    {
+        _container.BuildUp(instance);
+    }
+
+    protected override async void OnStartup(object sender, StartupEventArgs e)
+    {
+        await DisplayRootViewForAsync<ShellViewModel>();
     }
 }
