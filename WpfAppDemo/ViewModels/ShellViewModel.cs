@@ -2,6 +2,7 @@
 
 namespace WpfAppDemo.ViewModels;
 
+//Conductor<Screen> = Conductor<object>
 public class ShellViewModel :
     Conductor<object>,
     IHandle<LoginSuccessEvent>
